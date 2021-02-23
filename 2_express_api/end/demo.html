@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+      #result {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .item {
+        width: 200px;
+        height: 200px;
+        background-color: aquamarine;
+        margin: 10px;
+        color: black;
+        text-align: center;
+        font-size: 30px;
+      }
+      .name {
+        padding: 20px;
+        font-weight: bold;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div id="result">
+      <div class="item">
+        <div class="name">
+
+        </div>
+        <div class="inventory">
+          
+        </div>
+      </div>
+    </div>
+    
+    <script async defer>
+      function generateItem (data) {
+        let item = document.getElementsByClassName('item')[0].cloneNode(true);
+        item.querySelector('.name').innerHTML = data.name.toUpperCase();
+        item.querySelector('.inventory').innerHTML = data.inventory;
+        return item;
+      }
+
+      (function () {
+        let result = document.getElementById('result');
+        axios.get('http://localhost:8000/v1/products/')
+          .then(function (response) {
+            let items = response.data;
+            items.forEach(item => {
+              result.appendChild(generateItem(item))
+            })
+            document.getElementsByClassName('item')[0].remove();
+          })
+          .catch(function (error) {
+            result.innerHTML = (error);
+          }); 
+
+        
+      })();
+    </script>
+  </body>
+</html>
